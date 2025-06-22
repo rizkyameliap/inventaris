@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Hapus Stok Barang</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      padding: 40px 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      padding: 32px;
+    }
+
+    h1 {
+      color: #1f2937;
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .info-section {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .info-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-label {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .info-value {
+      color: #111827;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #374151;
+      font-weight: 500;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 14px;
+      text-decoration: none;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hapus Stok Barang</h1>
+
+    <div class="info-section">
+      <div class="info-item">
+        <span class="info-label">Nama Barang</span>
+        <span class="info-value">{{ barang.nama }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Kode</span>
+        <span class="info-value">{{ barang.kodeBarang }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Stok Saat Ini</span>
+        <span class="info-value">{{ barang.jumlah }}</span>
+      </div>
+    </div>
+
+    <form action="{{ route('barang.storeHapus', { id: barang.id }) }}" method="POST">
+      {{ csrfField() }}
+      
+      <div class="form-group">
+        <label for="jumlahDihapus">Jumlah Stok yang Dihapus</label>
+        <input 
+          type="number" 
+          name="jumlahDihapus" 
+          id="jumlahDihapus" 
+          required 
+          min="1" 
+          max="{{ barang.jumlah }}"
+          placeholder="Masukkan jumlah">
+      </div>
+
+      <div class="form-group">
+        <label for="alasan">Alasan Penghapusan</label>
+        <textarea 
+          name="alasan" 
+          id="alasan" 
+          required
+          placeholder="Rusak, hilang, dll..."></textarea>
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn btn-danger">Hapus Stok</button>
+        <a href="{{ route('barang.index') }}" class="btn btn-secondary">Batal</a>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

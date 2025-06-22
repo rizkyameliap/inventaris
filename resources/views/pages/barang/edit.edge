@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Barang</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563eb',
+            secondary: '#64748b',
+            accent: '#f59e0b',
+            success: '#10b981',
+            danger: '#ef4444',
+            warning: '#f59e0b'
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s ease-in-out',
+            'slide-up': 'slideUp 0.3s ease-out',
+            'pulse-subtle': 'pulseSubtle 2s infinite',
+            'shake': 'shake 0.5s ease-in-out'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(10px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: '1' },
+              '50%': { opacity: '0.8' }
+            },
+            shake: {
+              '0%, 100%': { transform: 'translateX(0)' },
+              '25%': { transform: 'translateX(-4px)' },
+              '75%': { transform: 'translateX(4px)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-amber-50 to-orange-100 min-h-screen">
+  <div class="container mx-auto px-6 py-8">
+    <!-- Header Section -->
+    <div class="animate-fade-in">
+      <nav class="flex items-center gap-2 text-sm text-gray-600 mb-6">
+        <a href="{{ route('barang.index') }}" class="hover:text-primary transition-colors">
+          <i class="bi bi-house-door"></i> Beranda
+        </a>
+        <i class="bi bi-chevron-right text-gray-400"></i>
+        <a href="{{ route('barang.index') }}" class="hover:text-primary transition-colors">Daftar Barang</a>
+        <i class="bi bi-chevron-right text-gray-400"></i>
+        <span class="text-gray-900 font-medium">Edit Barang</span>
+      </nav>
+      
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl mb-4 animate-pulse-subtle">
+          <i class="bi bi-pencil-square text-2xl text-white"></i>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Edit Barang</h1>
+        <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+          <i class="bi bi-box-seam"></i>
+          <span>{{ barang.nama }}</span>
+        </div>
+        <p class="text-gray-600 mt-2">Perbarui informasi barang sesuai kebutuhan</p>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="max-w-4xl mx-auto animate-slide-up">
+      <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/50 overflow-hidden">
+        <!-- Status Bar -->
+        <div class="bg-gradient-to-r from-amber-500 to-orange-600 p-6">
+          <div class="flex items-center justify-between text-white">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                <i class="bi bi-info-circle text-lg"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold">Status Barang</h3>
+                <p class="text-sm opacity-90">Kode: {{ barang.kodeBarang }}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold">{{ barang.jumlah }}</div>
+              <div class="text-sm opacity-90">Unit Tersedia</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Content -->
+        <form action="{{ route('barang.update', { id: barang.id }) }}" method="POST" class="p-8" id="editForm">
+            {{ csrfField() }}
+                <input type="hidden" name="_method" value="PUT">
+
+          <!-- Basic Information Section -->
+          <div class="mb-8">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                <i class="bi bi-info-circle text-primary text-lg"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Informasi Dasar</h3>
+                <p class="text-sm text-gray-600">Edit data utama barang</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="nama" class="block text-sm font-semibold text-gray-700">
+                  <i class="bi bi-box mr-2 text-primary"></i>Nama Barang
+                </label>
+                <input type="text" 
+                       class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 bg-gray-50 focus:bg-white" 
+                       id="nama" 
+                       name="nama" 
+                       value="{{ barang.nama }}"
+                       required>
+                <div class="text-xs text-gray-500 mt-1">
+                  <i class="bi bi-clock-history mr-1"></i>Terakhir diubah: {{ new Date().toLocaleDateString('id-ID') }}
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label for="kodeBarang" class="block text-sm font-semibold text-gray-700">
+                  <i class="bi bi-upc-scan mr-2 text-primary"></i>Kode Barang
+                </label>
+                <div class="relative">
+                  <input type="text" 
+                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 bg-gray-50 focus:bg-white font-mono" 
+                         id="kodeBarang" 
+                         name="kode_barang" 
+                         value="{{ barang.kodeBarang }}"
+                         required>
+                  <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse" title="Kode Unik"></div>
+                  </div>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">
+                  <i class="bi bi-shield-check mr-1 text-green-600"></i>Kode ini harus tetap unik
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category and Location Section -->
+          <div class="mb-8">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                <i class="bi bi-tags text-success text-lg"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Kategori & Lokasi</h3>
+                <p class="text-sm text-gray-600">Perbarui pengelompokan dan penempatan</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label for="kategoriId" class="block text-sm font-semibold text-gray-700">
+                  <i class="bi bi-tag mr-2 text-primary"></i>Kategori
+                </label>
+                <div class="relative">
+                  <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 bg-gray-50 focus:bg-white appearance-none" 
+                          id="kategoriId" 
+                          name="kategori_id">
+                    <option value="">Pilih Kategori</option>
+                    @each(kategori in kategoris)
+                      <option value="{{ kategori.id }}" {{ kategori.id === barang.kategoriId ? 'selected' : '' }}>
+                        {{ kategori.namaKategori }}
+                      </option>
+                    @endeach
+                  </select>
+                  <i class="bi bi-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
+                <div class="text-xs text-gray-500 mt-1" id="kategoriInfo">
+                  <i class="bi bi-info-circle mr-1"></i>Kategori saat ini: {{ barang.kategori?.namaKategori || 'Belum dipilih' }}
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label for="lokasiId" class="block text-sm font-semibold text-gray-700">
+                  <i class="bi bi-geo-alt mr-2 text-primary"></i>Lokasi
+                </label>
+                <div class="relative">
+                  <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 bg-gray-50 focus:bg-white appearance-none" 
+                          id="lokasiId" 
+                          name="lokasi_id">
+                    <option value="">Pilih Lokasi</option>
+                    @each(lokasi in lokasis)
+                      <option value="{{ lokasi.id }}" {{ lokasi.id === barang.lokasiId ? 'selected' : '' }}>
+                        {{ lokasi.namaLokasi }} - {{ lokasi.gedung }}
+                      </option>
+                    @endeach
+                  </select>
+                  <i class="bi bi-chevron-down absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
+                <div class="text-xs text-gray-500 mt-1" id="lokasiInfo">
+                  <i class="bi bi-building mr-1"></i>Lokasi saat ini: {{ barang.lokasi?.namaLokasi || 'Belum dipilih' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quantity Section with Warning -->
+          <div class="mb-8">
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                <i class="bi bi-123 text-accent text-lg"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Stok Barang</h3>
+                <p class="text-sm text-gray-600">Perbarui jumlah stok yang tersedia</p>
+              </div>
+            </div>
+
+            <div class="max-w-md">
+              <div class="space-y-2">
+                <label for="jumlah" class="block text-sm font-semibold text-gray-700">
+                  <i class="bi bi-hash mr-2 text-primary"></i>Jumlah Stok
+                </label>
+                <div class="relative">
+                  <input type="number" 
+                         class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all duration-300 bg-gray-50 focus:bg-white" 
+                         id="jumlah" 
+                         name="jumlah" 
+                         value="{{ barang.jumlah }}"
+                         min="0"
+                         required>
+                  <div class="absolute right-4 top-1/2 transform -translate-y-1/2">
+                    <span class="text-gray-400 text-sm">unit</span>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2 text-xs mt-2">
+                  <div class="flex items-center gap-1">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full"></div>
+                    <span class="text-gray-500">Stok awal: {{ barang.jumlah }}</span>
+                  </div>
+                  <span class="text-gray-300">•</span>
+                  <div class="flex items-center gap-1" id="stockStatus">
+                    <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                    <span class="text-green-600">Stok tersedia</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stock Warning -->
+              <div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl" id="stockWarning" style="display: none;">
+                <div class="flex items-center gap-2 text-amber-800">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <span class="font-medium">Peringatan Stok Rendah</span>
+                </div>
+                <p class="text-sm text-amber-700 mt-1">Stok barang ini akan menjadi rendah. Pertimbangkan untuk melakukan restocking.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Summary -->
+          <div class="mb-8 p-6 bg-blue-50 rounded-2xl border border-blue-100" id="changeSummary" style="display: none;">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <i class="bi bi-list-check text-blue-600"></i>
+              </div>
+              <h4 class="font-semibold text-gray-900">Ringkasan Perubahan</h4>
+            </div>
+            <div id="changesList" class="space-y-2 text-sm"></div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+            <button type="submit" 
+                    class="flex-1 sm:flex-none group inline-flex items-center justify-center bg-gradient-to-r from-amber-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+                    id="submitBtn">
+              <i class="bi bi-check-lg mr-2 text-lg group-hover:scale-110 transition-transform"></i>
+              <span>Simpan Perubahan</span>
+            </button>
+            
+            <a href="{{ route('barang.index') }}" 
+               class="flex-1 sm:flex-none inline-flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold px-8 py-4 rounded-xl transition-all duration-300">
+              <i class="bi bi-arrow-left mr-2"></i>
+              <span>Kembali</span>
+            </a>
+
+            <button type="button" 
+                    class="sm:ml-auto inline-flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-700 font-semibold px-6 py-4 rounded-xl transition-all duration-300"
+                    onclick="resetForm()">
+              <i class="bi bi-arrow-counterclockwise mr-2"></i>
+              <span>Reset</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Help Section -->
+    <div class="max-w-4xl mx-auto mt-8">
+      <div class="bg-orange-50/50 backdrop-blur-sm rounded-2xl p-6 border border-orange-100">
+        <div class="flex items-start gap-4">
+          <div class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center flex-shrink-0">
+            <i class="bi bi-lightbulb text-orange-600"></i>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 mb-2">Tips Edit Barang</h4>
+            <ul class="text-sm text-gray-600 space-y-1">
+              <li class="flex items-center gap-2">
+                <i class="bi bi-check-circle-fill text-green-500"></i>
+                Pastikan kode barang tetap unik setelah diedit
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="bi bi-check-circle-fill text-green-500"></i>
+                Perubahan kategori/lokasi akan mempengaruhi laporan
+              </li>
+              <li class="flex items-center gap-2">
+                <i class="bi bi-check-circle-fill text-green-500"></i>
+                Gunakan fitur mutasi untuk perubahan stok yang kompleks
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhanced JavaScript -->
+  <script>
+    // Store original values for comparison
+    const originalValues = {
+      nama: "{{ barang.nama }}",
+      kodeBarang: "{{ barang.kodeBarang }}",
+      kategoriId: "{{ barang.kategoriId }}",
+      lokasiId: "{{ barang.lokasiId }}",
+      jumlah: {{ barang.jumlah }}
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('editForm');
+      const inputs = form.querySelectorAll('input, select');
+      const changeSummary = document.getElementById('changeSummary');
+      const changesList = document.getElementById('changesList');
+      const stockWarning = document.getElementById('stockWarning');
+      const stockStatus = document.getElementById('stockStatus');
+      const submitBtn = document.getElementById('submitBtn');
+
+      // Track changes
+      function updateChangeSummary() {
+        const changes = [];
+        const currentValues = {
+          nama: document.getElementById('nama').value,
+          kodeBarang: document.getElementById('kodeBarang').value,
+          kategoriId: document.getElementById('kategoriId').value,
+          lokasiId: document.getElementById('lokasiId').value,
+          jumlah: parseInt(document.getElementById('jumlah').value) || 0
+        };
+
+        // Check for changes
+        Object.keys(originalValues).forEach(key => {
+          if (currentValues[key] != originalValues[key]) {
+            let fieldName = {
+              nama: 'Nama Barang',
+              kodeBarang: 'Kode Barang', 
+              kategoriId: 'Kategori',
+              lokasiId: 'Lokasi',
+              jumlah: 'Jumlah Stok'
+            }[key];
+
+            changes.push(`<div class="flex items-center gap-2 text-blue-700">
+              <i class="bi bi-arrow-right text-xs"></i>
+              <span>${fieldName}: <span class="font-medium">${originalValues[key]} → ${currentValues[key]}</span></span>
+            </div>`);
+          }
+        });
+
+        // Show/hide change summary
+        if (changes.length > 0) {
+          changesList.innerHTML = changes.join('');
+          changeSummary.style.display = 'block';
+          submitBtn.classList.add('animate-pulse-subtle');
+        } else {
+          changeSummary.style.display = 'none';
+          submitBtn.classList.remove('animate-pulse-subtle');
+        }
+
+        // Update stock status
+        const newStock = currentValues.jumlah;
+        if (newStock === 0) {
+          stockStatus.innerHTML = '<div class="w-2 h-2 bg-red-500 rounded-full"></div><span class="text-red-600">Stok habis</span>';
+          stockWarning.style.display = 'block';
+        } else if (newStock <= 5) {
+          stockStatus.innerHTML = '<div class="w-2 h-2 bg-yellow-500 rounded-full"></div><span class="text-yellow-600">Stok rendah</span>';
+          stockWarning.style.display = 'block';
+        } else {
+          stockStatus.innerHTML = '<div class="w-2 h-2 bg-green-500 rounded-full"></div><span class="text-green-600">Stok tersedia</span>';
+          stockWarning.style.display = 'none';
+        }
+      }
+
+      // Add event listeners
+      inputs.forEach(input => {
+        input.addEventListener('input', updateChangeSummary);
+        input.addEventListener('change', updateChangeSummary);
+
+        // Enhanced focus effects
+        input.addEventListener('focus', function() {
+          this.parentElement.style.transform = 'translateY(-2px)';
+          this.parentElement.style.transition = 'transform 0.2s ease';
+        });
+
+        input.addEventListener('blur', function() {
+          this.parentElement.style.transform = 'translateY(0)';
+          
+          // Validation feedback
+          if (this.hasAttribute('required') && !this.value.trim()) {
+            this.classList.add('border-red-300', 'focus:border-red-500', 'animate-shake');
+            setTimeout(() => this.classList.remove('animate-shake'), 500);
+          } else {
+            this.classList.remove('border-red-300', 'focus:border-red-500');
+            this.classList.add('border-green-300');
+            setTimeout(() => this.classList.remove('border-green-300'), 1000);
+          }
+        });
+      });
+
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        submitBtn.innerHTML = '<i class="bi bi-arrow-clockwise animate-spin mr-2"></i>Menyimpan...';
+        submitBtn.disabled = true;
+      });
+
+      // Initial check
+      updateChangeSummary();
+    });
+
+    // Reset form function
+    function resetForm() {
+      if (confirm('Yakin ingin mengembalikan semua perubahan?')) {
+        document.getElementById('nama').value = originalValues.nama;
+        document.getElementById('kodeBarang').value = originalValues.kodeBarang;
+        document.getElementById('kategoriId').value = originalValues.kategoriId;
+        document.getElementById('lokasiId').value = originalValues.lokasiId;
+        document.getElementById('jumlah').value = originalValues.jumlah;
+        
+        // Trigger change detection
+        document.getElementById('nama').dispatchEvent(new Event('input'));
+      }
+    }
+  </script>
+</body>
+</html>

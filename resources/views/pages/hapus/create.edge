@@ -1,0 +1,31 @@
+@layout.layouts.main({ title: 'Hapus Barang Rusak' })
+
+@section('content')
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header bg-danger text-white"><h3 class="mb-0">Form Hapus Barang (Rusak/Hilang)</h3></div>
+      <div class="card-body">
+        <div class="alert alert-warning">
+          Anda akan menghapus permanen barang: <strong>{{ barang.nama }} ({{ barang.kodeBarang }})</strong> dari daftar barang aktif.
+          <br>
+          Tindakan ini tidak bisa dibatalkan. Riwayat penghapusan akan dicatat.
+        </div>
+
+        <form action="{{ route('hapus.store', { id: barang.id }) }}" method="POST">
+          {{ csrfField() }}
+          <div class="mb-3">
+            <label for="alasan" class="form-label">Alasan Penghapusan</label>
+            <textarea name="alasan" id="alasan" class="form-control" rows="3" placeholder="Contoh: Barang rusak karena terjatuh, tidak bisa diperbaiki." required></textarea>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <a href="{{ route('barang.index') }}" class="btn btn-secondary me-2">Batal</a>
+            <button type="submit" class="btn btn-danger">Ya, Hapus Barang Ini</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@end

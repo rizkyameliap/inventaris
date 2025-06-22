@@ -1,0 +1,36 @@
+@layout.layouts.main({ title: 'Mutasi Barang' })
+
+@section('content')
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header"><h3 class="mb-0">Form Mutasi Barang</h3></div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          Anda akan memindahkan barang: <strong>{{ barang.nama }} ({{ barang.kodeBarang }})</strong>
+          <br>
+          Lokasi saat ini: <strong>{{ barang.lokasi.namaLokasi }} - Gedung {{ barang.lokasi.gedung }}</strong>
+        </div>
+
+        <form action="{{ route('mutasi.store', { id: barang.id }) }}" method="POST">
+          {{ csrfField() }}
+          <div class="mb-3">
+            <label for="tujuan_lokasi_id" class="form-label">Pindahkan ke Lokasi Tujuan</label>
+            <select name="tujuan_lokasi_id" id="tujuan_lokasi_id" class="form-select" required>
+              <option value="" disabled selected>-- Pilih Lokasi Tujuan --</option>
+              @each(lokasi in lokasis)
+                <option value="{{ lokasi.id }}">{{ lokasi.namaLokasi }} - Gedung {{ lokasi.gedung }}</option>
+              @end
+            </select>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <a href="{{ route('barang.index') }}" class="btn btn-secondary me-2">Batal</a>
+            <button type="submit" class="btn btn-primary">Proses Mutasi</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+@end
